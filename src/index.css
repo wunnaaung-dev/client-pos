@@ -8,13 +8,17 @@
   :root {
     font-family: 'Poppins', sans-serif;
     --background: 0 0% 100%;
+    --sidebar-from: hsl(200, 100%, 95%);
+    --sidebar-to: hsl(200, 100%, 85%);
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 210 100% 50%; /* Blue color updated */
-    --primary-foreground: 210 40% 98%; /* Matching foreground for blue */
+    --primary: 210 100% 50%;
+    /* Blue color updated */
+    --primary-foreground: 210 40% 98%;
+    /* Matching foreground for blue */
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
@@ -27,11 +31,17 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 210 100% 70%;
     --radius: 0.5rem;
-    --chart-1: 330 100% 70%;
-    --chart-2: 300 100% 25%;
-    --chart-3: 240 100% 27%;
-    --chart-4: 120 100% 20%;
-    --chart-5: 0 59% 41%;
+    --chart-1: 270 50% 30%;
+    /* Dark Purple */
+    --chart-2: 270 50% 25%;
+    /* Even Darker Purple */
+    --chart-3: 270 45% 35%;
+    /* Slightly Lighter Dark Purple */
+    --chart-4: 270 55% 20%;
+    /* Very Dark Purple */
+    --chart-5: 270 60% 15%;
+    /* Almost Black Purple */
+
   }
 
   .dark {
@@ -41,7 +51,8 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 330 100% 70%; /* Pink color updated to match #ff66c4 */
+    --primary: 330 100% 70%;
+    /* Pink color updated to match #ff66c4 */
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -53,7 +64,8 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 330 100% 70%; /* Pink color updated to match #ff66c4 */
+    --ring: 330 100% 70%;
+    /* Pink color updated to match #ff66c4 */
     --chart-1: 330 100% 70%;
     --chart-2: 300 100% 25%;
     --chart-3: 240 100% 27%;
@@ -66,7 +78,52 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  @media print {
+    .print:hidden {
+      display: none !important;
+    }
+
+    body {
+      background-color: red !important;
+      color: black !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100%;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    .min-w-800px {
+      min-width: auto !important;
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden !important;
+      transform: scale(0.9);
+      transform-origin: top left;
+    }
+
+    .no-page-break {
+      page-break-inside: avoid;
+    }
+
+    .container {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    * {
+      font-size: 10px !important;
+      line-height: 1.4 !important;
+    }
   }
 }

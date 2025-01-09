@@ -1,22 +1,27 @@
+import { Stock } from "./stock";
+
 export interface Product {
-    productId: string
+    id: number | string;
     name: string;
-    category: string;
-    availableColors: string;
+    category_id: string; 
+    color?: string
     roll_width: number;
     length: number;
-    width: number
-    has_string: HasString;
-    measurement_per_unit: number
-    product_code: string;
+    width: number;
+    has_string: HasString
+    measurement_per_unit: number;
+    product_code?: string;
     price_per_roll: number;
     price_per_yard: number;
     wholesale_price: number;
     retail_price: number;
-    discount?: string;
+    discount?: number;
+    quantity: number;
+    minimum_qty: number
+    stock?: Stock
 }
 
-export type ProductDTO = Omit<Product, "productId">;
+export type ProductDTO = Omit<Product, "id">;
 
 export enum HasString {
     S = "S",

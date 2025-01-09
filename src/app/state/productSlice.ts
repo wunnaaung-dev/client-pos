@@ -1,104 +1,89 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HasString, Product, ProductDTO } from "../../types/product";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Product, ProductDTO } from "../../types/product";
+import { RootState } from "./store";
+import { productService } from "../../api/productService";
 
 interface ProductState {
     products: Product[];
     selectedProduct: Product | null;
+    searchTerm: string
 }
 
 const initialState: ProductState = {
-    products: [
-        {
-            productId: "PD101",
-            name: "Fabric Roll A",
-            category: "Cotton",
-            availableColors: "Red, Blue, Green",
-            width: 45,
-            roll_width: 45,
-            length: 20,
-            has_string: HasString.S,
-            measurement_per_unit: 12,
-            product_code: "PC123",
-            price_per_roll: 100,
-            price_per_yard: 5,
-            wholesale_price: 90,
-            retail_price: 110,
-            discount: "10%",
-        },
-        {
-            productId: "PD102",
-            name: "Fabric Roll B",
-            category: "Cotton",
-            availableColors: "Red, Blue, Green",
-            width: 45,
-            roll_width: 45,
-            length: 20,
-            has_string: HasString.S,
-            measurement_per_unit: 12,
-            product_code: "PC123",
-            price_per_roll: 100,
-            price_per_yard: 5,
-            wholesale_price: 90,
-            retail_price: 110,
-            discount: "10%",
-        },
-        {
-            productId: "PD103",
-            name: "Fabric Roll C",
-            category: "Cotton",
-            availableColors: "Red, Blue, Green",
-            width: 45,
-            roll_width: 45,
-            length: 20,
-            has_string: HasString.S,
-            measurement_per_unit: 12,
-            product_code: "PC123",
-            price_per_roll: 100,
-            price_per_yard: 5,
-            wholesale_price: 90,
-            retail_price: 110,
-            discount: "10%",
-        },
-    ],
+    products: [],
     selectedProduct: null,
+    searchTerm: ""
 };
+
+export const fetchProducts = createAsyncThunk(
+    'products/fetchProducts',
+    async () => {
+        const response = await productService.getProducts()
+        return response.data.data
+    }
+)
+
+export const createNewProduct = createAsyncThunk(
+    'products/createNewProduct',
+    async(productDTO: ProductDTO) => {
+        const response = await productService.createProduct(productDTO)
+        return response?.data.data
+    }
+)
+
+export const updateProduct = createAsyncThunk(
+    "products/updateProduct",
+    async({ id, productDTO }: { id: string, productDTO: ProductDTO }) => {
+        const response = await productService.updateProduct(id, productDTO);
+        return response?.data.data;
+    }
+)
 
 const productSlice = createSlice({
     name: "products",
     initialState,
     reducers: {
-        addProduct: (state, action: PayloadAction<ProductDTO>) => {
-            const newProduct: Product = {
-                productId: `PD${Date.now()}`,
-                ...action.payload,
-            };
-            state.products.push(newProduct);
-        },
-        updateProduct: (state, action: PayloadAction<Product>) => {
-            const index = state.products.findIndex((product) => product.productId === action.payload.productId);
-            if (index !== -1) {
-                state.products[index] = { ...state.products[index], ...action.payload };
-            }
-        },
-        deleteProduct: (state, action: PayloadAction<string>) => {
-            state.products = state.products.filter((product) => product.productId !== action.payload);
-        },
         setProducts: (state, action: PayloadAction<Product[]>) => {
             state.products = action.payload;
         },
         setSelectedProduct: (state, action: PayloadAction<Product | null>) => {
             state.selectedProduct = action.payload;
         },
+        setSearchTerm: (state, action: PayloadAction<string>) => {
+            state.searchTerm = action.payload
+        }
     },
+    extraReducers: (builder) => {
+        builder.addCase(fetchProducts.fulfilled, (state, action) => {
+            state.products = action.payload as Product[]
+        })
+        builder.addCase(createNewProduct.fulfilled, (state, action) => {
+            if(Array.isArray(action.payload)) {
+                state.products = [...state.products, ...action.payload]
+            } else if (action.payload) {
+                state.products = [...state.products, action.payload]
+            }
+        })
+        builder.addCase(updateProduct.fulfilled, (state, action) => {
+            if (action.payload) {
+                const updatedProduct = action.payload;
+                if (!Array.isArray(updatedProduct)) {
+                    const index = state.products.findIndex((product: Product) => product.id === updatedProduct.id);
+                    if (index !== -1) {
+                        state.products[index] = updatedProduct;
+                    }
+                }
+            }
+        });
+    }
 });
 
-export const { addProduct, updateProduct, deleteProduct, setProducts, setSelectedProduct } = productSlice.actions;
+export const { setProducts, setSelectedProduct, setSearchTerm } = productSlice.actions;
 
-interface RootState {
-    products: ProductState;
-}
+
 
 export const selectProducts = (state: RootState): Product[] => state.products.products;
 export const selectSelectedProduct = (state: RootState): Product | null => state.products.selectedProduct;
+export const selectProductSearchTerm = (state: RootState) : string => state.products.searchTerm
 
 export default productSlice.reducer;

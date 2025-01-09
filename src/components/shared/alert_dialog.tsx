@@ -29,7 +29,9 @@ const AlertDialog: React.FC<Props> = ({ dialogTitle, dialogDesc, children, type,
   return (
     <DialogContent>
       <DialogHeader>
+
         <DialogTitle>{dialogTitle}</DialogTitle>
+
         {dialogDesc && <DialogDescription>{dialogDesc}</DialogDescription>}
       </DialogHeader>
       <Separator />
@@ -37,7 +39,7 @@ const AlertDialog: React.FC<Props> = ({ dialogTitle, dialogDesc, children, type,
       <DialogFooter className="space-x-2">
         <DialogClose asChild>
           <Button type="button" variant="secondary">
-            Close
+            Cancel
           </Button>
         </DialogClose>
         <Button type="submit" onClick={onClick} variant={buttonVariant}>

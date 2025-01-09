@@ -1,10 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
-interface Customer {
-    name: string;
-    phone: string;
-    type: "Regular" | "New";
-    address: string;
-}
+import { Customer } from "../types/customer";
+
 
 export const customerMockData: Customer[] = [
     {

@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
             columnFilters,
             pagination: {
                 pageIndex: 0,
-                pageSize: 20,
+                pageSize: 30,
             },
         },
         enableRowSelection: true,
@@ -101,7 +101,7 @@ export function DataTable<TData, TValue>({
                                 <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => {
                                         return (
-                                            <TableHead key={header.id}>
+                                            <TableHead key={header.id} className="font-semibold text-black">
                                                 {header.isPlaceholder
                                                     ? null
                                                     : flexRender(
@@ -135,7 +135,7 @@ export function DataTable<TData, TValue>({
                                 <TableRow>
                                     <TableCell
                                         colSpan={columns.length}
-                                        className="h-24 text-center"
+                                        className="h-10 text-center"
                                     >
                                         No results.
                                     </TableCell>

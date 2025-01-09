@@ -26,8 +26,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, path, icon, children }
         {/* Parent Menu */}
         <div
           onClick={toggleChildren}
-          className={`flex items-center justify-between gap-4 p-3 text-gray-700 hover:bg-gray-100 rounded-md cursor-pointer ${
-            isActiveModule(path) ? "bg-blue-100 text-blue-700" : ""
+          className={`flex items-center justify-between gap-4 p-3 text-gray-700 hover:bg-slate-200 rounded-md cursor-pointer ${
+            isActiveModule(path) ? "bg-blue-200 text-blue-700" : ""
           }`}
         >
           <div className="flex items-center gap-4">
@@ -35,7 +35,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, path, icon, children }
             <span className="font-medium">{label}</span>
           </div>
           <span className={`text-sm transition-transform ${showChildren ? "rotate-180" : ""}`}>
-            <ChevronDown />
+            <ChevronDown className="w-4 h-4"/>
           </span>
         </div>
 

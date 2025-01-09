@@ -1,20 +1,26 @@
-// import { useNavigate } from "react-router-dom"
 import { Button, SearchBar, Toolbar } from "../../components"
 import { Plus } from "lucide-react"
 import { Dialog, DialogContent, DialogTrigger } from "../../components/ui/dialog"
 import AlertDialog from "../../components/shared/alert_dialog"
 import ProductCategoryForm from "./product-category-form"
-import { DataTable } from "../../components/data-table/data-table"
+import ProductCategoriesTable from "./product-categories-table"
+import { useState } from "react"
+import useProductCategoryHook from "../../hooks/useProductCategoryHook"
 
-import { productCategoryMock, productCategoryColumns } from "../../mockData/productCategoryMock"
 
 const ProductCategories = () => {
-  // const navigate = useNavigate()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const {handleAddProductCategory,} = useProductCategoryHook()
+  const handleSaveCategory = async () => {
+    handleAddProductCategory()
+    setIsDialogOpen(false)
+  }
+
   return (
     <div>
       <Toolbar>
         <SearchBar onSearch={() => console.log("Searching...")} />
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus />
@@ -23,19 +29,16 @@ const ProductCategories = () => {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <AlertDialog
+              type="create"
               dialogTitle="Create Product Category"
-              onClick={() => {
-                console.log("Create button clicked");
-              }}
+              onClick={handleSaveCategory}
             >
               <ProductCategoryForm />
             </AlertDialog>
-
           </DialogContent>
         </Dialog>
-
       </Toolbar>
-      <DataTable data={productCategoryMock} columns={productCategoryColumns}/>
+      <ProductCategoriesTable />
     </div>
   )
 }
